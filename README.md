@@ -1,2 +1,2 @@
 # data-comparison
-compare data in flat files, and report the changed records and fields by using the key
+go code to compare data in one flat file to data in another flat file, join the records by using the specified key fields, and report the changed records and fields
