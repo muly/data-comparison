@@ -1,23 +1,33 @@
 package main
 
 type (
-	delta struct {
-		key       interface{}
+	columnDelta struct {
 		fieldName string `json:"FieldName"`
 		oldValue  string `json:"OldValue"`
 		newValue  string `json:"NewValue"`
 	}
+	rowDelta map[string]columnDelta
 
-	deltas struct {
+	fileDelta struct {
 		oldFileName string
 		newFileName string
-		delta       []delta
+		rowDelta
 	}
 
-	deltasAll []deltas
+	filesDelta []fileDelta
 )
 
 type (
+	row   map[string]string // map of column to its value
+	rows  map[string]row    // map of key to row
+	table struct {
+		sourceFileName string
+		rows
+	}
+	tables []table
+)
+
+/*type (
 	CertKey struct {
 		CertID string
 	}
@@ -37,4 +47,4 @@ type (
 		ProcessedFile string
 		CertRecords
 	}
-)
+)*/

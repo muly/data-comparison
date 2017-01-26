@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/csv"
 	"os"
+
 	//"fmt"
+	"strconv"
 	//"github.com/kr/pretty"
 )
 
@@ -26,61 +28,37 @@ func readFile(filePath string, delim rune) (records [][]string, err error) {
 	return
 }
 
-func (certs *CertRecords) Load(filePath string, delim rune) error {
+func (t table) Load(filePath string, delim rune) error {
+	//t = table{}
+
+	t.sourceFileName = filePath
 
 	records, err := readFile(filePath, delim)
 	if err != nil {
 		return err
 	}
 
-	var CertID, CertificationType, OriginalGrantDate, CertEndDate, CertStatus int
 	for i, record := range records {
-		if i == 0 {
-			for j, c := range record {
-				//find the position of each field
-				switch c {
-				case "CertID":
-					CertID = j
-				case "CertificationType":
-					CertificationType = j
-				case "OriginalGrantDate":
-					OriginalGrantDate = j
-				case "CertEndDate":
-					CertEndDate = j
-				case "CertStatus":
-					CertStatus = j
-				}
-			}
+		if i == 0 { // skip the header row
 			continue
-
 		}
 
-		k := CertKey{}
-		d := CertData{}
+		r := row{}
+		for j, _ := range record {
+			r[records[0][j]] = records[i][j]
+		}
 
-		k.CertID = record[CertID]
+		t.rows[strconv.Itoa(i)] = r //TODO: key needs to be change from index to actual key that user passes to the program
 
-		d.CertEndDate = record[CertEndDate]
-		d.CertStatus = record[CertStatus]
-		d.CertType = record[CertificationType]
-		d.OriginalGrantDate = record[OriginalGrantDate]
-
-		c := CertRecord{}
-
-		//fmt.Printf("%# v\n", pretty.Formatter(d))
-
-		c[k] = d
-
-		*certs = append(*certs, c)
 	}
 
-	/*	for i, d := range *certs {
+	/*for k, r := range t {
 		fmt.Println()
-		fmt.Println(i)
-		for k, v := range d {
-			fmt.Println(k, v)
+		fmt.Println(k)
+		for c, v := range r {
+			fmt.Println(c, v)
 		}
-	} */
+	}*/
 
 	return nil
 }
