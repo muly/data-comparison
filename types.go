@@ -1,20 +1,21 @@
 package main
 
 type (
-	columnDelta struct {
-		fieldName string `json:"FieldName"`
-		oldValue  string `json:"OldValue"`
-		newValue  string `json:"NewValue"`
+	delta struct { //d
+		oldValue string `json:"OldValue"`
+		newValue string `json:"NewValue"`
 	}
-	rowDelta map[string]columnDelta
+	columnDelta map[string]delta // map of column to its delta //cd
 
-	fileDelta struct {
-		oldFileName string
-		newFileName string
-		rowDelta
+	rowDelta map[string]columnDelta // map of row key to its delta //rd
+
+	fileDelta struct { //table delta //fd
+		oldFileName string `json:"OldFileName"`
+		newFileName string `json:"NewFileName"`
+		rowDelta    `json:"RowDelta"`
 	}
 
-	filesDelta []fileDelta
+	filesDelta []fileDelta //ds
 )
 
 type (

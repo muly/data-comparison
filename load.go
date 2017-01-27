@@ -28,20 +28,18 @@ func readFile(filePath string, delim rune) (records [][]string, err error) {
 	return
 }
 
-func (t table) Load(filePath string, delim rune) error {
-	//t = table{}
+func Load(filePath string, delim rune) (t table, err error) {
+	t.rows = rows{}
 
 	t.sourceFileName = filePath
 
 	records, err := readFile(filePath, delim)
 	if err != nil {
-		return err
+		return
 	}
 
 	for i, record := range records {
-		if i == 0 { // skip the header row
-			continue
-		}
+		//if i == 0 { continue } // skip the header row
 
 		r := row{}
 		for j, _ := range record {
@@ -52,7 +50,7 @@ func (t table) Load(filePath string, delim rune) error {
 
 	}
 
-	/*for k, r := range t {
+	/*for k, r := range t.rows {
 		fmt.Println()
 		fmt.Println(k)
 		for c, v := range r {
@@ -60,5 +58,5 @@ func (t table) Load(filePath string, delim rune) error {
 		}
 	}*/
 
-	return nil
+	return
 }

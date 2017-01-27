@@ -3,41 +3,53 @@ package main
 import (
 	//"encoding/json"
 	"fmt"
-
-	"time"
+	//"time"
 )
 
 func main() {
 
-	startTime := time.Now()
+	//startTime := time.Now()
 
 	var err error
 	var filePath string
 
-	t := tables{}
-
-	t1 := table{}
+	ts := tables{}
 
 	filePath = `C:\gowstemp\bin\file1.txt`
-	if err = t1.Load(filePath, '\t'); err != nil {
+	t1, err := Load(filePath, '\t')
+	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
-	t = append(t, t1)
+	ts = append(ts, t1)
+	//fmt.Println(filePath, time.Since(startTime), len(t1.rows), "rec")
 
-	fmt.Println(filePath, time.Since(startTime), len(t1.rows), "rec")
+	filePath = `C:\gowstemp\bin\file2.txt`
+	t2, err := Load(filePath, '\t')
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	ts = append(ts, t2)
+	//fmt.Println(filePath, time.Since(startTime), len(t2.rows), "rec")
 
-	t2 := table{}
 	filePath = `C:\gowstemp\bin\file3.txt`
-	if err = t2.Load(filePath, '\t'); err != nil {
+	t3, err := Load(filePath, '\t')
+	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
-	t = append(t, t2)
+	ts = append(ts, t3)
 
-	fmt.Println(filePath, time.Since(startTime), len(t2.rows), "rec")
+	ds := ts.delta()
 
-	//ds := t.delta()
+	/*	b, err := json.Marshal(ds)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}*/
+
+	ds.print()
 
 	/*
 		dall := deltasAll{}
