@@ -4,7 +4,7 @@ import (
 	"encoding/csv"
 	"os"
 
-	//"fmt"
+	"fmt"
 	"strconv"
 	//"github.com/kr/pretty"
 )
@@ -28,7 +28,7 @@ func readFile(filePath string, delim rune) (records [][]string, err error) {
 	return
 }
 
-func Load(filePath string, delim rune) (t table, err error) {
+func load(filePath string, delim rune, keys []string) (t table, err error) {
 	t.rows = rows{}
 
 	t.sourceFileName = filePath
@@ -39,10 +39,14 @@ func Load(filePath string, delim rune) (t table, err error) {
 	}
 
 	for i, record := range records {
-		//if i == 0 { continue } // skip the header row
+		if i == 0 { // skip the header row
+			continue
+		}
 
 		r := row{}
 		for j, _ := range record {
+			//if records[0][j] in keys{// handle keys}
+
 			r[records[0][j]] = records[i][j]
 		}
 
@@ -59,4 +63,16 @@ func Load(filePath string, delim rune) (t table, err error) {
 	}*/
 
 	return
+}
+
+func (t table) print() {
+	fmt.Println("Showing data from ", t.sourceFileName)
+	for k, r := range t.rows {
+		fmt.Print("\t[", k, "]")
+		for c, v := range r {
+			fmt.Print("\t", c, ":", v)
+		}
+		println()
+	}
+
 }

@@ -14,9 +14,10 @@ func main() {
 	var filePath string
 
 	ts := tables{}
+	keys := []string{"CRM_SYNC_ID"}
 
 	filePath = `C:\gowstemp\bin\file1.txt`
-	t1, err := Load(filePath, '\t')
+	t1, err := load(filePath, '\t', keys)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -25,7 +26,7 @@ func main() {
 	//fmt.Println(filePath, time.Since(startTime), len(t1.rows), "rec")
 
 	filePath = `C:\gowstemp\bin\file2.txt`
-	t2, err := Load(filePath, '\t')
+	t2, err := load(filePath, '\t', keys)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -34,22 +35,24 @@ func main() {
 	//fmt.Println(filePath, time.Since(startTime), len(t2.rows), "rec")
 
 	filePath = `C:\gowstemp\bin\file3.txt`
-	t3, err := Load(filePath, '\t')
+	t3, err := load(filePath, '\t', keys)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 	ts = append(ts, t3)
 
-	ds := ts.delta()
+	t1.print()
+	t2.print()
+	t3.print()
+
+	ts.delta().print()
 
 	/*	b, err := json.Marshal(ds)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}*/
-
-	ds.print()
 
 	/*
 		dall := deltasAll{}
