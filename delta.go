@@ -28,7 +28,7 @@ func (ts tables) delta() (ds filesDelta) {
 			}
 
 			//// if key exists,
-			cDelta := columnDelta{}
+			cDelta := columnValueDelta{}
 			for col, _ := range t1.rows[key] { // for each column
 				//fmt.Println("col:", col, t1.rows[key][col], t2.rows[key][col])
 
@@ -38,15 +38,14 @@ func (ts tables) delta() (ds filesDelta) {
 				}
 				// if column exists, then compare
 				if t1.rows[key][col] != t2.rows[key][col] {
-					cDelta[col] = delta{
+					cDelta[col] = valueDelta{
 						oldValue: t1.rows[key][col],
 						newValue: t2.rows[key][col],
 					}
-
 				}
 			}
 			if len(cDelta) > 0 {
-				fdelta.rowDelta[key] = cDelta
+				fdelta.rowDelta[key] = columnDelta{columnValueDelta: cDelta}
 			}
 
 		}
@@ -91,13 +90,13 @@ func (ds filesDelta) print() {
 		}
 
 		for key, cd := range fd.rowDelta {
-			if len(cd) == 0 {
+			if len(cd.columnValueDelta) == 0 && len(cd.columnValueDelta) == 0 {
 				continue
 			}
 			tab := "--"
 			fmt.Println(tab, "differences for key", key)
 
-			for col, d := range cd {
+			for col, d := range cd.columnValueDelta {
 				tab := "---"
 				fmt.Println(tab, "column", col, "changed from", d.oldValue, "to", d.newValue)
 			}

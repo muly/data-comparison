@@ -1,11 +1,17 @@
 package main
 
 type (
-	delta struct { //d
+	valueDelta struct { //d
 		oldValue string `json:"OldValue"`
 		newValue string `json:"NewValue"`
 	}
-	columnDelta map[string]delta // map of column to its delta //cd
+	columnValueDelta map[string]valueDelta // map of column to its delta //cd
+	columnOtherDelta map[string]string     //map of column to other delta. example: column missing, new column
+
+	columnDelta struct {
+		columnValueDelta
+		columnOtherDelta
+	}
 
 	rowDelta map[string]columnDelta // map of row key to its delta //rd
 
