@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"fmt"
-	"strconv"
+	//"strconv"
 	//"github.com/kr/pretty"
 )
 
@@ -58,13 +58,11 @@ func load(filePath string, delim rune, kfields keys) (t table, err error) {
 		}
 
 		for j, _ := range record {
-
 			//if records[0][j] in keys{// handle keys}
-
-			r[key] = records[i][j]
+			r[records[0][j]] = records[i][j]
 		}
 
-		t.rows[strconv.Itoa(i)] = r //TODO: key needs to be change from index to actual key that user passes to the program
+		t.rows[key] = r //TODO: key needs to be change from index to actual key that user passes to the program
 
 	}
 
