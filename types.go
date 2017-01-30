@@ -19,6 +19,7 @@ type (
 )
 
 type (
+	keys  []string
 	row   map[string]string // map of column to its value
 	rows  map[string]row    // map of key to row
 	table struct {
