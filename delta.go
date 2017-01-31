@@ -28,24 +28,34 @@ func (ts tables) delta() (ds filesDelta) {
 			}
 
 			//// if key exists,
-			cDelta := columnValueDelta{}
+			cvDelta := columnValueDelta{}
+			coDelta := columnOtherDelta{}
 			for col, _ := range t1.rows[key] { // for each column
 				//fmt.Println("col:", col, t1.rows[key][col], t2.rows[key][col])
 
 				if _, ok := t2.rows[key][col]; !ok { // see if the column exists in t2
+					coDelta[col] = "column missing"
 					//TODO: report column missing in t2
 					continue
 				}
 				// if column exists, then compare
 				if t1.rows[key][col] != t2.rows[key][col] {
-					cDelta[col] = valueDelta{
+					cvDelta[col] = valueDelta{
 						oldValue: t1.rows[key][col],
 						newValue: t2.rows[key][col],
 					}
 				}
 			}
-			if len(cDelta) > 0 {
-				fdelta.rowDelta[key] = columnDelta{columnValueDelta: cDelta}
+
+			if len(cvDelta) > 0 {
+				columnDelta := fdelta.rowDelta[key]
+				columnDelta.columnValueDelta = cvDelta
+				fdelta.rowDelta[key] = columnDelta
+			}
+			if len(coDelta) > 0 {
+				columnDelta := fdelta.rowDelta[key]
+				columnDelta.columnValueDelta = coDelta
+				fdelta.rowDelta[key] = columnDelta
 			}
 
 		}
@@ -59,11 +69,18 @@ func (ts tables) delta() (ds filesDelta) {
 			}
 
 			//// if key exists,
+			coDelta := columnOtherDelta{}
 			for col, _ := range t2.rows[key] { // for each column
 				if _, ok := t1.rows[key][col]; !ok { // see if the column exists in t1
 					//TODO: report column missing in t1
+					coDelta[col] = "new column"
 					continue
 				}
+			}
+			if len(coDelta) > 0 {
+				columnDelta := fdelta.rowDelta[key]
+				columnDelta.columnValueDelta = coDelta
+				fdelta.rowDelta[key] = columnDelta
 			}
 
 		}

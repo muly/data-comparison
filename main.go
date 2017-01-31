@@ -14,7 +14,7 @@ func main() {
 	var filePath string
 
 	ts := tables{}
-	k := keys{"CRM_SYNC_ID"}
+	k := keys{"col1"}
 
 	filePath = `C:\gowstemp\bin\file1.txt`
 	t1, err := load(filePath, '\t', k)
